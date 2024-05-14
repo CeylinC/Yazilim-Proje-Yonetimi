@@ -7,7 +7,7 @@ class Button extends StatefulWidget {
 
 class _Button extends State<Button> {
   String buttonText = "Start";
-  int _countdown = 5;
+  int _countdown = 6;
 
   @override
   void initState() {
@@ -18,12 +18,12 @@ class _Button extends State<Button> {
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         if (_countdown > 0) {
-          buttonText = (_countdown--).toString();
+          buttonText = (--_countdown).toString();
         }
       });
       if (_countdown == 0) {
         buttonText = "Again";
-        _countdown = 5;
+        _countdown = 6;
         return;
       }
       startCountdown();
