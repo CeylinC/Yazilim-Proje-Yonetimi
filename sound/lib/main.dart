@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sound/widget/Button.dart';
 import 'package:sound/widget/Image.dart';
@@ -48,12 +50,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String? _uploadResult;
+  Map<String, dynamic>? _uploadResult;
 
   void _handleFileUpload() async {
     String? result = await uploadFile();
     setState(() {
-      _uploadResult = result;
+      if (result != null) {
+        _uploadResult = jsonDecode(result);
+      }
     });
   }
 
@@ -71,62 +75,75 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Histogram(
-                  imagePath: 'lib/assets/histogram.jpg',
-                ),
-                Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "Sound Owner",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "FM Score",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "ACC Score",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "Text",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(_uploadResult?.substring(15, _uploadResult!.length - 8) ?? "None"),
-                          const Text("10"),
-                          const Text("30"),
-                          Container(
-                            width: screenWidth * 2 / 3,
-                            constraints: const BoxConstraints(
-                                minWidth: 100, maxWidth: 500),
-                            child: const Text(
-                              'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-                              softWrap: true,
-                              maxLines: 30,
+              children: _uploadResult != null
+                  ? <Widget>[
+                      const Histogram(),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Sound Owner",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "FM Score",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "ACC Score",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Text",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                    ]),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 100),
-                  child: Button(uploadFile: _handleFileUpload),
-                )
-              ],
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(_uploadResult!["result"]!),
+                                Text(_uploadResult!["F1_score"]!),
+                                Text(_uploadResult!["acc_score"]!),
+                                Container(
+                                  width: screenWidth * 2 / 3,
+                                  constraints: const BoxConstraints(
+                                      minWidth: 100, maxWidth: 500),
+                                  child: Text(
+                                    _uploadResult!["audio_text"]!,
+                                    softWrap: true,
+                                    maxLines: 30,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ]),
+                      const Padding(
+                          padding: EdgeInsets.only(top: 50),
+                          child: Text("Record Sound",
+                              style: TextStyle(fontSize: 36))),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 50),
+                        child: Button(uploadFile: _handleFileUpload),
+                      )
+                    ]
+                  : [
+                      const Padding(
+                          padding: EdgeInsets.only(top: 50),
+                          child: Text("Record Sound",
+                              style: TextStyle(fontSize: 36))),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 50),
+                        child: Button(uploadFile: _handleFileUpload),
+                      )
+                    ],
             ),
           ),
         ));

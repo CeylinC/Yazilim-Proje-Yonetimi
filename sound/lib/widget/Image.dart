@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 
-class Histogram extends StatelessWidget {
-  final String imagePath;
-  final double width;
-  final double height;
+class Histogram extends StatefulWidget{
+  const Histogram({super.key});
 
-  const Histogram({
-    required this.imagePath,
-    this.width = 1000.0,
-    this.height = 300.0,
-  });
+  @override
+  _Histogram createState() => _Histogram();
+
+}
+class _Histogram extends State<Histogram> {
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
+        width: 1000.0,
+        height: 300.0,
+        decoration: const BoxDecoration(
           shape: BoxShape.rectangle,
           image: DecorationImage(
             fit: BoxFit.fitWidth,
-            alignment: const Alignment(0.0, -0.72),
-            image: AssetImage(imagePath),
+            alignment: Alignment(0.0, -0.72),
+            image: NetworkImage("http://127.0.0.1:8000/image/"),
           ),
         ),
         child: const Text("Histogram: ", style: TextStyle(fontWeight: FontWeight.bold,)));
