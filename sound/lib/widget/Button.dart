@@ -6,6 +6,9 @@ import 'package:flutter_desktop_audio_recorder/flutter_desktop_audio_recorder.da
 import 'package:path_provider/path_provider.dart';
 
 class Button extends StatefulWidget {
+  final Function() uploadFile;
+
+  const Button({super.key, required this.uploadFile});
   @override
   _Button createState() => _Button();
 }
@@ -46,6 +49,7 @@ class _Button extends State<Button> {
         buttonText = "Again";
         _counter = 5;
         stopRecording();
+        widget.uploadFile();
         return;
       }
       startCountdown();
@@ -115,7 +119,6 @@ class _Button extends State<Button> {
           break;
         default:
       }
-      log(e.message ?? "Unhandled error");
     }
   }
 }
